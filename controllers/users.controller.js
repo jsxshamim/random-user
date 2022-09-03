@@ -37,10 +37,14 @@ module.exports.randomUser = (req, res) => {
     });
 };
 
-module.exports.getUser = (req, res) => {
-    const { id } = req.params;
-    const user = users.find((user) => user.id === Number(id));
-    res.json(user);
+module.exports.saveUser = (req, res) => {
+    const user = req.body;
+    const newUser = [...users, user];
+    const stringifiedUser = JSON.stringify(newUser);
+    fs.writeFileSync("users.json", stringifiedUser);
+    res.status(200).send({
+        data: stringifiedUser,
+    });
 };
 
 module.exports.addUser = (req, res) => {

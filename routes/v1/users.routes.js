@@ -7,9 +7,9 @@ router.route("/").get(usersController.home);
 
 router.route("/all").get(usersController.allUsers);
 router.route("/random").get(usersController.randomUser);
-router.route("/save").get(usersController.getUser);
-router.route("/update").get(usersController.getUser);
-router.route("/bulk-update").get(usersController.getUser);
-router.route("/delete").get(usersController.getUser);
+router.route("/save").post(usersController.saveUser);
+router.route("/update").get(usersController.saveUser);
+router.route("/bulk-update").get(usersController.saveUser);
+router.route("/delete").get(usersController.saveUser);
 
 module.exports = router;
