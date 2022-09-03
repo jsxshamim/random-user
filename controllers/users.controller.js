@@ -37,6 +37,7 @@ module.exports.randomUser = (req, res) => {
     });
 };
 
+// Save a single user
 module.exports.saveUser = (req, res) => {
     const newUser = req.body;
     const allUser = [...users, newUser];
@@ -65,6 +66,7 @@ module.exports.saveUser = (req, res) => {
     }
 };
 
+// Update a single user
 module.exports.updateUser = (req, res) => {
     const { id } = req.params;
     const exist = users.find((user) => user.id === Number(id));
@@ -93,6 +95,7 @@ module.exports.updateUser = (req, res) => {
     }
 };
 
+// Update a multiple users
 module.exports.bulkUpdate = (req, res) => {
     const newUsers = req.body;
     if (Array.isArray(newUsers)) {
@@ -125,6 +128,7 @@ module.exports.bulkUpdate = (req, res) => {
     }
 };
 
+// Delete User
 module.exports.deleteUser = (req, res) => {
     const { id } = req.params;
     if (id > 0) {
