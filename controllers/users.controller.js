@@ -38,13 +38,31 @@ module.exports.randomUser = (req, res) => {
 };
 
 module.exports.saveUser = (req, res) => {
-    const user = req.body;
-    const newUser = [...users, user];
-    const stringifiedUser = JSON.stringify(newUser);
-    fs.writeFileSync("users.json", stringifiedUser);
-    res.status(200).send({
-        data: stringifiedUser,
-    });
+    const newUser = req.body;
+    const allUser = [...users, newUser];
+    const stringifiedUser = JSON.stringify(allUser);
+    const exist = users.find((user) => user.id === Number(newUser.id));
+
+    if (!exist) {
+        if (!newUser.id || !newUser.gender || !newUser.name || !newUser.contact || !newUser.address || !newUser.photoUrl) {
+            res.status(200).send({
+                success: false,
+                message: "Please add the require property to save user",
+            });
+        } else {
+            fs.writeFileSync("users.json", stringifiedUser);
+            res.status(200).send({
+                success: true,
+                message: "new user added successfully",
+                data: stringifiedUser,
+            });
+        }
+    } else {
+        res.status(200).send({
+            success: false,
+            message: "User ID already exist!",
+        });
+    }
 };
 
 module.exports.addUser = (req, res) => {
