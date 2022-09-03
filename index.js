@@ -13,7 +13,6 @@ app.use(cors());
 
 dbConnect();
 
-app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/user", usersRoutes);
 
 app.get("/", (req, res) => res.send(`<h2>Welcome to Random User Assignment</h2>`));

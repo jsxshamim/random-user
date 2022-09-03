@@ -1,12 +1,40 @@
-let users = [
-    { id: 1, name: "Shamim", age: 22 },
-    { id: 2, name: "Ruhul", age: 25 },
-    { id: 3, name: "Samrat", age: 28 },
-    { id: 4, name: "Kamrul", age: 30 },
-];
+const fs = require("fs");
 
-module.exports.getUsers = (req, res) => {
-    res.json(users);
+const usersData = fs.readFileSync("users.json");
+const users = JSON.parse(usersData);
+
+module.exports.home = (req, res) => {
+    res.send(`<h2>Welcome to Random User Assignment</h2>`);
+};
+
+// Get All Users
+module.exports.allUsers = (req, res) => {
+    const { limit } = req.query;
+    const limitedUsers = users.slice(0, limit);
+
+    if (users.length) {
+        res.status(200).send({
+            success: true,
+            message: "Success",
+            data: req.query ? limitedUsers : users,
+        });
+    } else {
+        res.status(500).send({
+            success: false,
+            error: "No Content",
+        });
+    }
+};
+
+// Random User Generate
+module.exports.randomUser = (req, res) => {
+    const randomIndex = Math.floor(Math.random() * users.length);
+    const randomUser = users[randomIndex];
+    res.status(200).send({
+        success: true,
+        message: "random user generated!",
+        data: randomUser,
+    });
 };
 
 module.exports.getUser = (req, res) => {
