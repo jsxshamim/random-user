@@ -1,6 +1,6 @@
 # random user API using Express and Node Js.
 
-Live Server [https://dewalt-bd.herokuapp.com/](https://dewalt-bd.herokuapp.com/).
+Live Server [http://randomuserapi-seby.onrender.com:10000/api/v1/user/](http://randomuserapi-seby.onrender.com:10000/api/v1/user).
 
 ## Features & Functionalities
 
