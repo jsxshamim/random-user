@@ -1,6 +1,6 @@
 # random user API using Express and Node Js.
 
-Live Server [https://randomuserapi-seby.onrender.com](https://randomuserapi-seby.onrender.com).
+Live Server [https://randomuserapi-seby.onrender.com/api/v1/user](https://randomuserapi-seby.onrender.com/api/v1/user).
 
 ## Features & Functionalities
 
