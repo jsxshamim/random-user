@@ -15,8 +15,6 @@ dbConnect();
 
 app.use("/api/v1/user", usersRoutes);
 
-app.get("/", (req, res) => res.send(`<h2>Welcome to Random User Assignment</h2>`));
-
 // if hit the route that not created at
 app.all("*", (req, res) =>
     res.status(404).json({

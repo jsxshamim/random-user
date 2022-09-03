@@ -19,7 +19,7 @@ module.exports.allUsers = (req, res) => {
             data: req.query ? limitedUsers : users,
         });
     } else {
-        res.status(500).send({
+        res.status(400).send({
             success: false,
             error: "No Content",
         });
@@ -65,37 +65,83 @@ module.exports.saveUser = (req, res) => {
     }
 };
 
-module.exports.addUser = (req, res) => {
-    const exist = users.find((user) => user.id === Number(req.body.id));
-    if (!exist) {
-        users.push(req.body);
-    }
-    res.status(200).send({
-        status: 200,
-        success: true,
-        message: "add user successfully",
-        data: users,
-    });
-    res.status(500).send({
-        status: 500,
-        success: false,
-        error: "Internal server error",
-    });
-};
-
 module.exports.updateUser = (req, res) => {
     const { id } = req.params;
     const exist = users.find((user) => user.id === Number(id));
+    if (id == req.body.id) {
+        exist.id = req.body.id ? req.body.id : exist.id;
+        exist.name = req.body.name ? req.body.name : exist.name;
+        exist.gender = req.body.gender ? req.body.gender : exist.gender;
+        exist.contact = req.body.contact ? req.body.contact : exist.contact;
+        exist.address = req.body.address ? req.body.address : exist.address;
+        exist.photoUrl = req.body.photoUrl ? req.body.photoUrl : exist.photoUrl;
 
-    exist.age = req.body.age ? req.body.age : exist.age;
-    exist.name = req.body.name ? req.body.name : exist.name;
+        const updatedUsers = JSON.stringify(users);
 
-    res.send(exist);
+        fs.writeFileSync("users.json", updatedUsers);
+
+        res.status(200).send({
+            success: true,
+            message: "User updated successfully!",
+            data: exist,
+        });
+    } else {
+        res.status(400).send({
+            success: false,
+            message: `you have to used ID: ${id}, in the body to update user`,
+        });
+    }
+};
+
+module.exports.bulkUpdate = (req, res) => {
+    const newUsers = req.body;
+    if (Array.isArray(newUsers)) {
+        newUsers.map((user) => {
+            const id = user.id;
+            const exist = users.find((user) => user.id === Number(id));
+
+            exist.id = user.id ? user.id : exist.id;
+            exist.name = user.name ? user.name : exist.name;
+            exist.gender = user.gender ? user.gender : exist.gender;
+            exist.contact = user.contact ? user.contact : exist.contact;
+            exist.address = user.address ? user.address : exist.address;
+            exist.photoUrl = user.photoUrl ? user.photoUrl : exist.photoUrl;
+
+            const updatedUsers = JSON.stringify(users);
+
+            fs.writeFileSync("users.json", updatedUsers);
+
+            res.status(200).send({
+                success: true,
+                message: "Multiple Users updated!",
+                data: updatedUsers,
+            });
+        });
+    } else {
+        res.status(400).send({
+            success: false,
+            message: "Please input an array to update multiple user",
+        });
+    }
 };
 
 module.exports.deleteUser = (req, res) => {
     const { id } = req.params;
-    const remaining = users.filter((user) => user.id !== Number(id));
-    users = remaining;
-    res.send(remaining);
+    if (id > 0) {
+        const remainingUsers = users.filter((user) => user.id !== Number(id));
+
+        fs.writeFileSync("users.json", JSON.stringify(remainingUsers));
+
+        res.status(200).send({
+            success: true,
+            message: `ID: ${id}, deleted successfully!`,
+            data: remainingUsers,
+        });
+        res.send(remainingUsers);
+    } else {
+        res.status(400).send({
+            success: false,
+            message: "Please input the valid ID to delete the user",
+        });
+    }
 };
